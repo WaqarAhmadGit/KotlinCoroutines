@@ -2,12 +2,18 @@ package com.waqar.kotlincoroutines
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
-import kotlin.concurrent.thread
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-   lateinit var counterText :TextView
+    private val TAG = MainActivity::class.java.name
+   private lateinit var counterText :TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,8 +31,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun doAction(view: View) {
-        thread(start = true) {
-            executeLonRunningTask()
+        CoroutineScope(Dispatchers.IO).launch {
+            Log.d(TAG, "1 - ${Thread.currentThread().name}")
+        }
+
+        GlobalScope.launch(Dispatchers.Main) {
+            Log.d(TAG, "2 - ${Thread.currentThread().name}")
+        }
+
+        MainScope().launch(Dispatchers.Default) {
+            Log.d(TAG, "3 - ${Thread.currentThread().name}")
         }
     }
 }
