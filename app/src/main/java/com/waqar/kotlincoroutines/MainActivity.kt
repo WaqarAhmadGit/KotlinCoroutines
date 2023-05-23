@@ -6,9 +6,9 @@ import android.util.Log
 import android.widget.TextView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
 
 class MainActivity : AppCompatActivity() {
     private val TAG = MainActivity::class.java.name
@@ -19,24 +19,36 @@ class MainActivity : AppCompatActivity() {
         counterText = findViewById(R.id.counter_text)
 
         CoroutineScope(Dispatchers.IO).launch {
-            task1()
-        }
-
-        CoroutineScope(Dispatchers.IO).launch {
-            task2()
+            printFollowers()
         }
     }
 
-    private suspend fun task1() {
-        Log.d(TAG, "STARTING TASK 1")
+    private suspend fun printFollowers() {
+        // Using Launch
+        var fbFollowers = 0
+        var instagramFollowers = 0
+        val job1 = CoroutineScope(Dispatchers.IO).launch {
+            fbFollowers = getFbFollowers()
+        }
+
+        val job2 = CoroutineScope(Dispatchers.IO).launch {
+            instagramFollowers = getInstagramFollowers()
+        }
+
+
+        job1.join()
+        job2.join()
+        Log.d(TAG, "FB - $fbFollowers, Insta $instagramFollowers.toString()")
+    }
+
+    private suspend fun getFbFollowers():Int {
         delay(1000)
-        Log.d(TAG, "ENDING TASK 1")
+        return 54
     }
 
-    private suspend fun task2() {
-        Log.d(TAG, "STARTING TASK 2")
-        delay(2000)
-        Log.d(TAG, "ENDING TASK 2")
+    private suspend fun getInstagramFollowers():Int {
+        delay(1000)
+        return 113
     }
 
 }
