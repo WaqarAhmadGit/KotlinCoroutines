@@ -23,14 +23,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/update_counter"
-        android:onClick="updateCounter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/counter_text" />
 
     <Button
         android:id="@+id/execute"
-        android:onClick="doAction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/execute"
