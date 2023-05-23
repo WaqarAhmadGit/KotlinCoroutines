@@ -24,21 +24,39 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun printFollowers() {
-        // Using Launch
-        var fbFollowers = 0
-        var instagramFollowers = 0
-        val job1 = CoroutineScope(Dispatchers.IO).launch {
-            fbFollowers = getFbFollowers()
+//        // Using Launch
+//        var fbFollowers = 0
+//        var instagramFollowers = 0
+//        val job1 = CoroutineScope(Dispatchers.IO).launch {
+//            fbFollowers = getFbFollowers()
+//        }
+//
+//        val job2 = CoroutineScope(Dispatchers.IO).launch {
+//            instagramFollowers = getInstagramFollowers()
+//        }
+//
+//        job1.join()
+//        job2.join()
+//        Log.d(TAG, "FB - $fbFollowers, Insta $instagramFollowers.toString()")
+
+        // Using Async
+        val fb = CoroutineScope(Dispatchers.IO).async {
+            getFbFollowers()
         }
 
-        val job2 = CoroutineScope(Dispatchers.IO).launch {
-            instagramFollowers = getInstagramFollowers()
+        val instagram = CoroutineScope(Dispatchers.IO).async {
+             getInstagramFollowers()
         }
 
+        Log.d(TAG, "FB - ${fb.await()}, Instagram ${instagram.await()}.toString()")
 
-        job1.join()
-        job2.join()
-        Log.d(TAG, "FB - $fbFollowers, Insta $instagramFollowers.toString()")
+        // Another way to do it
+        CoroutineScope(Dispatchers.IO).launch {
+            val fb = async { getFbFollowers() }
+            val instagram = async { getInstagramFollowers() }
+            Log.d(TAG, "FB - ${fb.await()}, Instagram ${instagram.await()}.toString()")
+        }
+
     }
 
     private suspend fun getFbFollowers():Int {
