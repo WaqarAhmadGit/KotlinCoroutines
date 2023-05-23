@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">KotlinCoroutines</string>
+    <string name="update_counter">Update Counter</string>
+    <string name="execute">Execute Task</string>
 </resources>
